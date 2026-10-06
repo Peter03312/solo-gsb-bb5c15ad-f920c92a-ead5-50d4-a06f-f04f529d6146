@@ -1,0 +1,16 @@
+# 单段 BED12 转录本整体迁移示例（与 demo.chain 配套，side=target）
+# BED12 共 12 列：chrom start end name score strand thickStart thickEnd
+#   itemRgb blockCount blockSizes blockStarts（blockStarts 相对 chromStart）
+#
+# TX1（行 3）：3 个外显子全部落在 chain 1 的对齐块内（[56,176)、[179,200)），
+#   整体映射到 chrA，正链，编码区随外显子迁移后重算。
+# TX2（行 4）：单外显子 chr1:[320,360) 同时完整命中 chain 1（→chrA 正链）
+#   与 chain 2（→chrB，query 负链，目标块整体反转 → strand 翻成 '+'），
+#   两条都是完整路径 => 歧义，全部导出，不自动选取。
+# TX3（行 5）：第 2 个外显子 [16,50) 落在 chain 1 的链内缺口 [16,56)，
+#   没有任何完整路径 => 无映射，只在预览中给原因，不写入下载的 BED12。
+# TX4（行 6）：非编码转录本（thickStart=thickEnd=0），演示零长 thick 保持。
+chr1	56	200	TX1	0	+	100	190	0	3	44,76,21,	0,44,123,
+chr1	300	400	TX2	0	-	320	380	0	1	100,	0,
+chr1	0	50	TX3	0	+	0	50	0	2	16,34,	0,16,
+chr1	56	176	TX4	0	.	56	56	255,0,0	1	120,	0,
